@@ -18,6 +18,12 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
+      "@blog/auth": [
+        "libs/auth/src"
+      ],
+      "@blog/auth/*": [
+        "libs/auth/src/*"
+      ],
       "@blog/shared": [
         "libs/shared/src"
       ],
