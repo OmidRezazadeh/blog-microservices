@@ -23,5 +23,6 @@ async function bootstrap() {
   });
 
   await app.startAllMicroservices();
+  console.log('✅ User-service is running (REST + Microservice)');
 }
 bootstrap();

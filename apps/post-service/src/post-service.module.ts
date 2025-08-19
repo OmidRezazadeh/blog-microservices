@@ -4,6 +4,7 @@ import { PostServiceService } from './post-service.service';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Post } from './entities/post.entity';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [
@@ -15,6 +16,18 @@ import { Post } from './entities/post.entity';
         signOptions: { expiresIn: process.env.JWT_EXPIRES_IN },
       }),
     }),
+
+    ClientsModule.register([
+      {
+        name: 'USER_RMQ',
+        transport: Transport.RMQ,
+        options: {
+          urls: ['amqp://user_rabbitmq:admin_rabbitmq@localhost:5672'],
+          queue: 'user_queue',
+          queueOptions: { durable: false },
+        },
+      },
+    ]),
   ],
   controllers: [PostServiceController],
   providers: [PostServiceService],

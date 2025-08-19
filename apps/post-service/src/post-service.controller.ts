@@ -12,6 +12,7 @@ export class PostServiceController {
     @Body() createPostDto:CreatePostDto,
     @Request() request) {
       const userId = request.user.id;
+
       return this.postServiceService.store(createPostDto, userId);
 
   }

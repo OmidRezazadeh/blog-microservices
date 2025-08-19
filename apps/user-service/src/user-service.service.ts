@@ -20,4 +20,9 @@ export class UserServiceService {
     });
     return this.userRepository.save(user);
   }
+
+  async validateUser(data: { userId: number }) {
+    const user = await this.userRepository.findOne({ where: { id: data.userId } });
+    return user; 
+  }
 }
