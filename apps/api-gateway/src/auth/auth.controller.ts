@@ -1,21 +1,18 @@
 import { Controller, Post, Body } from '@nestjs/common';
-import { RegisterDto } from '../../../user-service/src/dto/Register.dto';
-import { UserServiceService } from '../../../user-service/src/user-service.service';
-import { LoginDto } from '../../../../libs/common/src/dto/Login.dto';
+import { AuthService } from './auth.service';
+import { LoginDto, RegisterDto } from 'blog/common';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly userService: UserServiceService) {}
+  constructor(private readonly authService: AuthService) {}
 
   @Post('register')
   async register(@Body() registerDto: RegisterDto) {
-    return this.userService.store(registerDto);
+    return this.authService.store(registerDto);
   }
   
   @Post('login')
   async login(@Body() loginDto: LoginDto) {
-    // For login, we'll need to implement this in UserServiceService
-    // For now, returning a placeholder
-    return { message: 'Login functionality to be implemented' };
+    return this.authService.login(loginDto);
   }
 }

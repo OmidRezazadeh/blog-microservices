@@ -7,14 +7,16 @@ import { JwtAuthGuard, JwtStrategy } from '@blog/auth';
 import { AuthService } from './auth.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'blog/common/entities';
+import { AuthController } from './auth.controller';
 
 @Module({
   imports: [
+    ConfigModule,
     PassportModule,
     TypeOrmModule.forFeature([User]),
     JwtModule.registerAsync({
-      imports:[ConfigModule],
-      useFactory: (configService:ConfigService) => ({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET'),
         signOptions: { expiresIn: configService.get<string>('JWT_EXPIRES_IN') },
       }),
@@ -32,9 +34,10 @@ import { User } from 'blog/common/entities';
           },
         },
       },
-    ]),  
+    ]),
   ],
   providers: [AuthService, JwtStrategy, JwtAuthGuard],
   exports: [AuthService, JwtAuthGuard, JwtModule, JwtStrategy],
+  controllers: [AuthController]
 })
 export class AuthModule {}
