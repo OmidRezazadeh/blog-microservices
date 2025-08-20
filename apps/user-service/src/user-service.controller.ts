@@ -4,19 +4,25 @@ import { MessagePattern, EventPattern, Payload, Ctx, RmqContext } from '@nestjs/
 import { Inject } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom, timeout } from 'rxjs';
+import { RegisterDto } from '../../../libs/common/src/dto/Register.dto';
+
 
 
 @Controller('user')
 export class UserServiceController {
   constructor(
-    private readonly userServiceService: UserServiceService,
+    private readonly userService: UserServiceService,
     @Inject('POST_RMQ') private readonly postClient: ClientProxy,
   ) {}
 
+  @MessagePattern('user.register')
+  async register(registerDto:RegisterDto){
+    return await this.userService.store(registerDto)
+  }
 
   @MessagePattern('user.validate')
   async ValidateUser(@Payload() data: { userId: number }) {
-    return await this.userServiceService.validateUser(data);
+    return await this.userService.validateUser(data);
  
 
   }
