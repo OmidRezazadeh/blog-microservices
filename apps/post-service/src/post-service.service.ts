@@ -21,12 +21,8 @@ export class PostServiceService {
   const isValid = await lastValueFrom(
    this.userClient
    .send('user.validate',{userId})
-   .pipe(
-    timeout(3000),
-    catchError(()=> of(false)),
-   ),
-  );
-  console.log('Validation result:', isValid);
+   .pipe(timeout(3000),catchError(()=> of(false))),);
+    console.log(isValid);
 
   if (!isValid) {
     throw new UnauthorizedException('invalid user');
@@ -36,13 +32,14 @@ export class PostServiceService {
     userId: userId,
   });
   const saved= await this.postRepository.save(post);
-  this.userClient.emit('post.created',{
-  postId:saved.id,
-  userId,
-  title:saved.title
-})
-
-  return saved;
-
+  
+  
+  this.userClient.emit('post.created', {
+    postId: saved.id,
+    userId,
+    title: saved.title,
+  });
+  console.log('📤 post.created emitted to exchange');
+return saved
   }
 }

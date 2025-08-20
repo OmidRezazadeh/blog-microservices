@@ -25,6 +25,8 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
           urls: ['amqp://user_rabbitmq:admin_rabbitmq@localhost:5672'],
           queue: 'user_queue',
           queueOptions: { durable: false },
+          exchange: 'posts',
+          exchangeType: 'topic',
         },
       },
     ]),

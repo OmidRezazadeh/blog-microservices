@@ -19,6 +19,8 @@ async function bootstrap() {
       queueOptions: {
         durable: false,
       },
+      exchange: 'posts',     
+      exchangeType: 'topic',
     },
   });
 
