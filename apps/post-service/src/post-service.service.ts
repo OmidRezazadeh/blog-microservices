@@ -1,7 +1,7 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreatePostDto } from './dto/createPost.dto';
 import { Repository } from 'typeorm';
-import { Post } from './entities/post.entity';
+import { Post } from 'blog/common/entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ClientProxy } from '@nestjs/microservices';
 import { catchError, lastValueFrom, timeout, of } from 'rxjs';
@@ -43,7 +43,7 @@ export class PostServiceService {
     return saved;
   }
   async findByUserId(userId: number) {
-    const posts = await this.postRepository.find({ where: { userId } });
+    const posts = await this.postRepository.find({ where: {  userId } });
     
     // Get user data from user service
     const user = await lastValueFrom(
@@ -66,7 +66,7 @@ export class PostServiceService {
       posts: posts.map(post => ({
         id: post.id,
         title: post.title,
-        description: post.description,
+        content: post.description,
         userId: post.userId,
         // Add other post fields as needed
       }))

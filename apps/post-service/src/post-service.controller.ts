@@ -2,7 +2,7 @@ import { Body, Controller, Request , Post, UseGuards, Get } from '@nestjs/common
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { PostServiceService } from './post-service.service';
 import { CreatePostDto } from './dto/createPost.dto';
-import { JwtAuthGuard } from '@blog/auth/guards/jwt.auth.guard';
+import { JwtAuthGuard } from '@blog/auth';
 
 @Controller('post')
 export class PostServiceController {
