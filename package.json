@@ -92,7 +92,9 @@
     ],
     "moduleNameMapper": {
       "^@blog/auth(|/.*)$": "<rootDir>/libs/auth/src/$1",
-      "^@blog/shared(|/.*)$": "<rootDir>/libs/shared/src/$1"
+      "^@blog/shared(|/.*)$": "<rootDir>/libs/shared/src/$1",
+      "^blog/common(|/.*)$": "<rootDir>/libs/common/src/$1",
+      "^blog/database(|/.*)$": "<rootDir>/libs/database/src/$1"
     }
   }
 }

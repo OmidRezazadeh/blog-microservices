@@ -29,6 +29,18 @@
       ],
       "@blog/shared/*": [
         "libs/shared/src/*"
+      ],
+      "blog/common": [
+        "libs/common/src"
+      ],
+      "blog/common/*": [
+        "libs/common/src/*"
+      ],
+      "blog/database": [
+        "libs/database/src"
+      ],
+      "blog/database/*": [
+        "libs/database/src/*"
       ]
     }
   }
