@@ -5,6 +5,7 @@ import { AuthService } from './auth.service';
 import { User } from './entities/user.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { UserServiceController } from './user-service.controller';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 import { UserServiceService } from './user-service.service';
 
 @Module({
@@ -17,6 +18,17 @@ import { UserServiceService } from './user-service.service';
       },
     })
   }),
+  ClientsModule.register([
+    {
+      name: 'POST_RMQ',
+      transport: Transport.RMQ,
+      options: {
+        urls: ['amqp://user_rabbitmq:admin_rabbitmq@localhost:5672'],
+        queue: 'post_queue',
+        queueOptions: { durable: false },
+      },
+    },
+  ]),
 ],
   controllers: [AuthController,UserServiceController],
   providers: [AuthService,UserServiceService],

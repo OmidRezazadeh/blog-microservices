@@ -22,7 +22,7 @@ export class UserServiceService {
   }
 
   async validateUser(data: { userId: number }) {
-    const user = await this.userRepository.findOne({ where: { id: data.userId } });
-    return user; 
+    return await this.userRepository.findOne({ where: { id: data.userId } });
+ 
   }
 }
