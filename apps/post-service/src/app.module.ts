@@ -3,14 +3,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostServiceController } from './post-service.controller';
 import { PostServiceService } from './post-service.service';
 import { ConfigModule } from '@nestjs/config';
-import { Post } from './entities/post.entity';
-import { User } from 'apps/user-service/src/entities/user.entity';
+import { Post } from 'blog/common/entities';
 import { PostServiceModule } from './post-service.module';
 import { AuthModule } from '@blog/auth';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({ 
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
     TypeOrmModule.forRootAsync({
       useFactory: () => ({
         type: 'postgres',
@@ -19,14 +21,15 @@ import { AuthModule } from '@blog/auth';
         username: process.env.DB_USERNAME || 'blog_user',
         password: process.env.DB_PASSWORD || 'blog_pass',
         database: process.env.DB_DATABASE || 'blog_db',
-        entities: [Post, User],
+        entities: [Post],
         synchronize: process.env.NODE_ENV !== 'production',
       }),
     }),
-    TypeOrmModule.forFeature([Post, User]),
+    TypeOrmModule.forFeature([Post]),
     PostServiceModule,
     AuthModule,
   ],
   controllers: [PostServiceController],
+  providers: [PostServiceService],
 })
 export class AppModule {}

@@ -1,9 +1,9 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { User } from 'blog/common/entities';
-import { RegisterDto } from './dto/Register.dto';
+import { RegisterDto, LoginDto } from 'blog/common';
 
 @Injectable()
 export class UserServiceService {
@@ -13,8 +13,6 @@ export class UserServiceService {
   ) {}
 
   async store(registerDto: RegisterDto) {
-
-
     const existingUser = await this.userRepository.findOne({
       where: { email: registerDto.email },
     });
@@ -31,8 +29,24 @@ export class UserServiceService {
     return this.userRepository.save(user);
   }
 
+  async login(loginDto: LoginDto) {
+    const user = await this.userRepository.findOne({
+      where: { email: loginDto.email },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException('کاربری یافت نشد');
+    }
+
+    const isPasswordValid = await bcrypt.compare(loginDto.password, user.password);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('رمز عبور اشتباه است');
+    }
+
+    return user;
+  }
+
   async validateUser(data: { userId: number }) {
     return await this.userRepository.findOne({ where: { id: data.userId } });
- 
   }
 }

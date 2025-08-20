@@ -4,9 +4,7 @@ import { MessagePattern, EventPattern, Payload, Ctx, RmqContext } from '@nestjs/
 import { Inject } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom, timeout } from 'rxjs';
-import { RegisterDto } from '../../../libs/common/src/dto/Register.dto';
-
-
+import { RegisterDto, LoginDto } from 'blog/common';
 
 @Controller('user')
 export class UserServiceController {
@@ -16,16 +14,20 @@ export class UserServiceController {
   ) {}
 
   @MessagePattern('user.register')
-  async register(registerDto:RegisterDto){
-    return await this.userService.store(registerDto)
+  async register(registerDto: RegisterDto) {
+    return await this.userService.store(registerDto);
+  }
+
+  @MessagePattern('user.login')
+  async login(loginDto: LoginDto) {
+    return await this.userService.login(loginDto);
   }
 
   @MessagePattern('user.validate')
   async ValidateUser(@Payload() data: { userId: number }) {
     return await this.userService.validateUser(data);
- 
-
   }
+
   @EventPattern('post.created')
   async onPostCreated(@Payload() data: any) {
     console.log('📬 post.created received in user-service:', data);
