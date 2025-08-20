@@ -1,4 +1,4 @@
-import { Body, Controller, Request , Post, UseGuards, Get, Param, Query } from '@nestjs/common';
+import { Body, Controller, Request , Post, UseGuards, Get } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { PostServiceService } from './post-service.service';
 import { CreatePostDto } from './dto/createPost.dto';
