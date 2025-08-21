@@ -1,11 +1,11 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
 import { User } from 'blog/common/entities';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto, RegisterDto } from 'blog/common';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, timeout } from 'rxjs';
 import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
@@ -14,24 +14,54 @@ export class AuthService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly jwtService: JwtService,
-    @Inject('USER_SERVICE') private readonly rabbitClient: ClientProxy
+    @Inject('AUTH_SERVICE') private readonly rabbitClient: ClientProxy
   ) {}
 
   async store(registerDto: RegisterDto) {
-    const user = await firstValueFrom(
-      this.rabbitClient.send('user.register', registerDto)
-    );
-    return this.generateJwtToken(user);
+    try {
+      const user = await firstValueFrom(
+        this.rabbitClient.send('user.register', registerDto).pipe(timeout(5000))
+      );
+      
+      // Check if the response contains an error
+      if (user && user.error) {
+        if (user.errorType === 'ConflictException') {
+          throw new ConflictException(user.message);
+        } else {
+          throw new Error(user.message);
+        }
+      }
+      
+      return this.generateJwtToken(user);
+    } catch (error) {
+      console.error('Error in auth store:', error);
+      throw error;
+    }
   }
 
   async login(loginDto: LoginDto) {
-    const user = await firstValueFrom(
-      this.rabbitClient.send('user.login', loginDto)
-    );
-    const token = await this.generateJwtToken(user);
-    return {
-      access_token: token.accessToken,
-    };
+    try {
+      const user = await firstValueFrom(
+        this.rabbitClient.send('user.login', loginDto).pipe(timeout(5000))
+      );
+      
+      // Check if the response contains an error
+      if (user && user.error) {
+        if (user.errorType === 'UnauthorizedException') {
+          throw new UnauthorizedException(user.message);
+        } else {
+          throw new Error(user.message);
+        }
+      }
+      
+      const token = await this.generateJwtToken(user);
+      return {
+        access_token: token.accessToken,
+      };
+    } catch (error) {
+      console.error('Error in auth login:', error);
+      throw error;
+    }
   }
 
   async generateJwtToken(user) {

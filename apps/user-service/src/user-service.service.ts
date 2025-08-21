@@ -12,6 +12,12 @@ export class UserServiceService {
     private readonly userRepository: Repository<User>,
   ) {}
 
+  async getAll(){
+    console.log('step four')
+    return await this.userRepository.find()
+  }
+
+
   async store(registerDto: RegisterDto) {
     const existingUser = await this.userRepository.findOne({
       where: { email: registerDto.email },

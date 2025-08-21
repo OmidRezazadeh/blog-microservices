@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
-import { PassportModule } from '@nestjs/passport';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { JwtAuthGuard, JwtStrategy } from '@blog/auth';
-import { AuthService } from './auth.service';
+import { UserController } from './user.controller';
+import { UserService } from './user.service';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'blog/common/entities';
-import { AuthController } from './auth.controller';
+import { JwtModule } from '@nestjs/jwt';
+
 
 @Module({
   imports: [
@@ -22,13 +22,16 @@ import { AuthController } from './auth.controller';
       }),
       inject: [ConfigService],
     }),
+
+
+
     ClientsModule.register([
       {
-        name: 'AUTH_SERVICE',
+        name: 'USER_SERVICE',
         transport: Transport.RMQ,
         options: {
-          urls: ['amqp://user_rabbitmq:admin_rabbitmq@localhost:5672'],
-          queue: 'auth_queue',
+            urls: ['amqp://user_rabbitmq:admin_rabbitmq@localhost:5672'],
+            queue: 'user_queue',
           queueOptions: {
             durable: false,
           },
@@ -36,8 +39,8 @@ import { AuthController } from './auth.controller';
       },
     ]),
   ],
-  providers: [AuthService, JwtStrategy, JwtAuthGuard],
-  exports: [AuthService, JwtAuthGuard, JwtModule, JwtStrategy],
-  controllers: [AuthController]
+  controllers: [UserController],
+  providers: [UserService],
+  exports: [UserService],
 })
-export class AuthModule {}
+export class UsersModule {}

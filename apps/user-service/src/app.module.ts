@@ -10,6 +10,7 @@ import { DatabaseModule } from 'blog/database';
     DatabaseModule,
     // TypeOrmModule.forFeature([Post, User]),
     UserServiceModule,
+    
   ],
 })
 export class AppModule {}

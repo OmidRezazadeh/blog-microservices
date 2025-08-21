@@ -10,11 +10,11 @@ import { UserServiceService } from './user-service.service';
     TypeOrmModule.forFeature([User]),
     ClientsModule.register([
       {
-        name: 'POST_RMQ',
+        name: 'USER_SERVICE',
         transport: Transport.RMQ,
         options: {
           urls: ['amqp://user_rabbitmq:admin_rabbitmq@localhost:5672'],
-          queue: 'post_queue',
+          queue: 'user_queue',
           queueOptions: { durable: false },
         },
       },

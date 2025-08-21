@@ -6,6 +6,9 @@ import { AppController } from './app.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User, Post } from 'blog/common/entities';
 import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './user/user.module';
+
+
 
 @Module({
   imports: [
@@ -15,6 +18,7 @@ import { AuthModule } from './auth/auth.module';
     TypeOrmModule.forFeature([Post, User]),
     DatabaseModule,
     AuthModule,
+    UsersModule
   ],
   controllers: [AppController],
   providers: [AppService],
