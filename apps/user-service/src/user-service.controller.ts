@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { UserServiceService } from './user-service.service';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { RegisterDto, LoginDto } from 'blog/common';
+
 
 @Controller('user')
 export class UserServiceController {
@@ -14,35 +14,17 @@ export class UserServiceController {
     console.log('step three')
     return await this.userService.getAll()
   }
-  @MessagePattern('user.register')
-  async register(registerDto: RegisterDto) {
-    try {
-      return await this.userService.store(registerDto);
-    } catch (error) {
-      console.error('Error in user.register:', error);
-      throw error;
-    }
-  }
+ 
 
-  @MessagePattern('user.login')
-  async login(loginDto: LoginDto) {
-    try {
-      return await this.userService.login(loginDto);
-    } catch (error) {
-      console.error('Error in user.login:', error);
-      throw error;
-    }
-  }
-
-  @MessagePattern('user.validate')
-  async ValidateUser(@Payload() data: { userId: number }) {
-    try {
-      return await this.userService.validateUser(data);
-    } catch (error) {
-      console.error('Error in user.validate:', error);
-      throw error;
-    }
-  }
+  // @MessagePattern('user.validate')
+  // async ValidateUser(@Payload() data: { userId: number }) {
+  //   try {
+  //     return await this.userService.validateUser(data);
+  //   } catch (error) {
+  //     console.error('Error in user.validate:', error);
+  //     throw error;
+  //   }
+  // }
 
   // @EventPattern('post.created')
   // async onPostCreated(@Payload() data: any) {
