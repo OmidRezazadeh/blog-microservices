@@ -37,15 +37,6 @@
         "tsConfigPath": "apps/auth-service/tsconfig.app.json"
       }
     },
-    "blog-microservices": {
-      "type": "application",
-      "root": "apps/blog-microservices",
-      "entryFile": "main",
-      "sourceRoot": "apps/blog-microservices/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/blog-microservices/tsconfig.app.json"
-      }
-    },
     "common": {
       "type": "library",
       "root": "libs/common",

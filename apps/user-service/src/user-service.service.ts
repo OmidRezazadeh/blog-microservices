@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -13,10 +13,7 @@ export class UserServiceService {
   ) {}
 
   async getAll(){
-    console.log('step four')
-    return await this.userRepository.find()
+      return await this.userRepository.find()
   }
-
-
 
 }

@@ -11,8 +11,9 @@ export class UserServiceController {
 
   @MessagePattern('user.getAll')
   async getAll(){
-    console.log('step three')
-    return await this.userService.getAll()
+
+
+      return await this.userService.getAll()
   }
  
 
