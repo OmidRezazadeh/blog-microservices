@@ -8,7 +8,7 @@ export class UserService {
 @Inject('USER_SERVICE') private readonly rabbitClient:ClientProxy
     ){}
     async getAll(){
-        console.log('step two')
+  
     return await firstValueFrom(
         this.rabbitClient.send('user.getAll',{})
     )

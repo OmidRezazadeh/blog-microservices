@@ -7,8 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User, Post } from 'blog/common/entities';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './user/user.module';
-
-
+import { PostModule } from './post/post.module';
 
 @Module({
   imports: [
@@ -18,7 +17,8 @@ import { UsersModule } from './user/user.module';
     TypeOrmModule.forFeature([Post, User]),
     DatabaseModule,
     AuthModule,
-    UsersModule
+    UsersModule,
+    PostModule
   ],
   controllers: [AppController],
   providers: [AppService],

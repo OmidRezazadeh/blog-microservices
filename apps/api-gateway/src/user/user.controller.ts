@@ -10,7 +10,7 @@ constructor(private readonly userService:UserService){}
 @UseGuards(JwtAuthGuard)  
 @Get('getAll')
 async getAllUser(){
-    console.log('first step')
+  
     return await this.userService.getAll()
   }  
 
