@@ -22,4 +22,5 @@ export class PostServiceController {
   async delete(@Payload() data:{id:number,userId:number}){
     return this.postServiceService.delete(data.id,data.userId)
   }
+  
 }
