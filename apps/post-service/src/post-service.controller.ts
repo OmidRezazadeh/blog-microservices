@@ -1,7 +1,7 @@
 import { Body, Controller, Request , Post, UseGuards, Get } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { PostServiceService } from './post-service.service';
-import { CreatePostDto } from './dto/createPost.dto';
+import { CreatePostDto } from '../../../libs/common/src/dto/createPost.dto';
 import { JwtAuthGuard } from '@blog/auth';
 
 @Controller('post')
@@ -17,8 +17,8 @@ export class PostServiceController {
       return this.postServiceService.store(createPostDto, userId);
   }
 
-  @MessagePattern('post.byUser')
-  async getPostsByUser(@Payload() data: { userId: number }) {
-    return this.postServiceService.findByUserId(data.userId);
-  }
+  // @MessagePattern('post.byUser')
+  // async store(@Payload() data: { userId: number }) {
+  //   return this.postServiceService.findByUserId(data.userId);
+  // }
 }

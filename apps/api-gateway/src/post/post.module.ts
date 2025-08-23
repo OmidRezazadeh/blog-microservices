@@ -1,13 +1,15 @@
 import { Module } from '@nestjs/common';
-import { PostServiceController } from './post-service.controller';
-import { PostServiceService } from './post-service.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Post } from 'blog/common/entities';
+import { ConfigModule } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Post} from 'blog/common/entities';
+import { PostController } from './post.controller';
+import { PostService } from './post.service';
 import { AuthModule } from '@blog/auth';
 
 @Module({
   imports: [
+    ConfigModule,
     TypeOrmModule.forFeature([Post]),
     AuthModule,
     ClientsModule.register([
@@ -17,14 +19,15 @@ import { AuthModule } from '@blog/auth';
         options: {
           urls: ['amqp://user_rabbitmq:admin_rabbitmq@localhost:5672'],
           queue: 'post_queue',
-          queueOptions: { durable: false },
-
+          queueOptions: {
+            durable: false,
+          },
         },
       },
     ]),
   ],
-  controllers: [PostServiceController],
-  providers: [PostServiceService],
-  exports: [PostServiceService],
+  controllers: [PostController],
+  providers: [PostService],
+  exports: [PostService],
 })
-export class PostServiceModule {}
+export class PostModule {}
