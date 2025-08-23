@@ -1,24 +1,21 @@
-import { Body, Controller, Request , Post, UseGuards, Get } from '@nestjs/common';
-import { MessagePattern, Payload } from '@nestjs/microservices';
+import { Body, Controller, NotFoundException, Request} from '@nestjs/common';
+import { MessagePattern, Payload, RpcException } from '@nestjs/microservices';
 import { PostServiceService } from './post-service.service';
 import { CreatePostDto } from '../../../libs/common/src/dto/createPost.dto';
-import { JwtAuthGuard } from '@blog/auth';
 
 @Controller('post')
 export class PostServiceController {
   constructor(private readonly postServiceService: PostServiceService) {}
 
-  @UseGuards(JwtAuthGuard)
-  @Post('store')
-  async store(
-    @Body() createPostDto:CreatePostDto,
-    @Request() request) {
-      const userId = request.user.id;
-      return this.postServiceService.store(createPostDto, userId);
-  }
 
-  // @MessagePattern('post.byUser')
-  // async store(@Payload() data: { userId: number }) {
-  //   return this.postServiceService.findByUserId(data.userId);
-  // }
+  @MessagePattern('post.create')
+  async store(@Payload() data:{userId:number,createPostDto:CreatePostDto}) {    
+      return this.postServiceService.store(data.createPostDto, data.userId);
+  }
+  
+
+  @MessagePattern('post.findById')
+  async findById(@Payload() data: { userId:number,id:number }) {
+      return this.postServiceService.findByUserId(data.userId,data.id);
+  }
 }

@@ -1,14 +1,14 @@
 // apps/user-service/src/main.ts
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module'; 
-import { ValidationPipe } from '@nestjs/common';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
-
+import { ValidationPipe } from '@nestjs/common';
+import { useContainer } from 'class-validator';
 async function bootstrap() {
 
   const app = await NestFactory.create(AppModule); 
-  app.useGlobalPipes(new ValidationPipe({ transform: false }));
-
+  app.useGlobalPipes(new ValidationPipe());
+  useContainer(app.select(AppModule), { fallbackOnErrors: true });
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.RMQ,
     options: {

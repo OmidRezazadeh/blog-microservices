@@ -1,10 +1,10 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException,  } from '@nestjs/common';
 import { CreatePostDto } from '../../../libs/common/src/dto/createPost.dto';
 import { Repository } from 'typeorm';
 import { Post } from 'blog/common/entities';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ClientProxy } from '@nestjs/microservices';
-import { catchError, lastValueFrom, timeout, of } from 'rxjs';
+import { NotFoundError } from 'rxjs';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class PostServiceService {
@@ -22,9 +22,18 @@ export class PostServiceService {
 
   }
   
-  async findByUserId(userId: number) {
-    // const posts = await this.postRepository.find({ where: {  userId } });
-    
+  async findByUserId(userId:number,id:number) {
+   const  post = await this.postRepository.findOne(
+      { where: {userId:userId,id:id}});
+       if (!post) {
+       return new RpcException({
+          status: 400,
+          error: 'Bad Request',
+          message: 'Invalid payload data'
+        });
+       }
+       return post;
+
     // // Get user data from user service
     // const user = await lastValueFrom(
     //   this.userClient.send('user.validate', { userId }).pipe(

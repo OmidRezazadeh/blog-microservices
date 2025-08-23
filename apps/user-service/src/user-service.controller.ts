@@ -27,10 +27,7 @@ export class UserServiceController {
   //   }
   // }
 
-  // @EventPattern('post.created')
-  // async onPostCreated(@Payload() data: any) {
-  //   console.log('📬 post.created received in user-service:', data);
-  // }
+
 
   // HTTP endpoint: get posts of a user by id
   // @Get('/:id/posts')
