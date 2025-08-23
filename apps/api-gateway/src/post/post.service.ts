@@ -19,4 +19,10 @@ export class PostService {
      async findById(userId:number,id:number){
             return await firstValueFrom(this.rabbitClient.send('post.findById',{userId,id})) 
      }
+
+     async delete(id:number,userId:number){
+            return await firstValueFrom(
+                this.rabbitClient.send('post.delete',{id,userId}
+            ))
+     }
 }

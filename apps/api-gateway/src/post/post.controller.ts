@@ -2,6 +2,7 @@ import { JwtAuthGuard } from '@blog/auth';
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -10,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { CreatePostDto } from 'blog/common/dto/createPost.dto';
 import { PostService } from './post.service';
+
 
 @Controller('post')
 export class PostController {
@@ -27,5 +29,13 @@ export class PostController {
   async findById(@Param('id') id: number, @Request() request) {
     const userId = request.user.id;
      return await this.postService.findById(userId,id)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete('/:id')
+  async delete(@Param('id') id: number,@Request() request){
+    
+    const userId = request.user.id;
+   return await this.postService.delete(id,userId)
   }
 }

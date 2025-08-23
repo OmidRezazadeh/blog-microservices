@@ -18,4 +18,8 @@ export class PostServiceController {
   async findById(@Payload() data: { userId:number,id:number }) {
       return this.postServiceService.findByUserId(data.userId,data.id);
   }
+  @MessagePattern('post.delete')
+  async delete(@Payload() data:{id:number,userId:number}){
+    return this.postServiceService.delete(data.id,data.userId)
+  }
 }
