@@ -8,8 +8,8 @@ async function bootstrap() {
 
   const app = await NestFactory.create(AppModule); 
   app.useGlobalPipes(new ValidationPipe());
-  await app.listen(3001, '0.0.0.0');
-  console.log('Server running on http://localhost:3001');
+  await app.listen(3003, '0.0.0.0');
+  console.log('Server running on http://localhost:3003');
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.RMQ,

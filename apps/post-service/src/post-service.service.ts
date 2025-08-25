@@ -1,23 +1,36 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreatePostDto } from '../../../libs/common/src/dto/createPost.dto';
 import { Repository } from 'typeorm';
 import { Post } from 'blog/common/entities';
 import { InjectRepository } from '@nestjs/typeorm';
-import { RpcException } from '@nestjs/microservices';
+import { ClientProxy, RpcException } from '@nestjs/microservices';
+import { catchError, timeout, of } from 'rxjs';
 
 @Injectable()
 export class PostServiceService {
   constructor(
     @InjectRepository(Post)
     private readonly postRepository: Repository<Post>,
+    @Inject('POST_SERVICE') private readonly rabbitClient:ClientProxy,
+
   ) {}
 
   async store(createPostDto: CreatePostDto, userId: number) {
-    const post = this.postRepository.create({
-      ...createPostDto,
-      userId: userId,
-    });
-    return await this.postRepository.save(post);
+    try {
+      const post = this.postRepository.create({
+        ...createPostDto,
+        userId: userId,
+      });
+      this.rabbitClient.emit('post.alert',{
+        message:'make post for you'
+      }).pipe(timeout(3000),
+    catchError(()=> of(null))
+    )
+      return await this.postRepository.save(post);
+    } catch (error) {
+      console.log(error)
+    }
+
   }
 
   async findByUserId(userId: number, id: number) {

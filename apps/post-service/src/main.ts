@@ -10,6 +10,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
   app.connectMicroservice<MicroserviceOptions>({
+    
     transport: Transport.RMQ,
     options: {
       urls: ['amqp://user_rabbitmq:admin_rabbitmq@localhost:5672'],
@@ -21,7 +22,7 @@ async function bootstrap() {
   await app.startAllMicroservices();
   console.log('Post-service microservice is running');
 
-  await app.listen(3001, '0.0.0.0');
-  console.log('REST API running on http://localhost:3001');
+  await app.listen(3002, '0.0.0.0');
+  console.log('REST API running on http://localhost:3002');
 }
 bootstrap();

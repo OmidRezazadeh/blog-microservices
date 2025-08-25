@@ -1,5 +1,5 @@
-import { Body, Controller, NotFoundException, Request} from '@nestjs/common';
-import { MessagePattern, Payload, RpcException } from '@nestjs/microservices';
+import { Body, Controller} from '@nestjs/common';
+import { EventPattern, MessagePattern, Payload } from '@nestjs/microservices';
 import { PostServiceService } from './post-service.service';
 import { CreatePostDto } from '../../../libs/common/src/dto/createPost.dto';
 
@@ -22,5 +22,10 @@ export class PostServiceController {
   async delete(@Payload() data:{id:number,userId:number}){
     return this.postServiceService.delete(data.id,data.userId)
   }
+  
+  @EventPattern('post.alert')
+  async handleUserAlert(@Payload() data: { message:string }) {
+    console.log(data.message)
+  } 
   
 }
