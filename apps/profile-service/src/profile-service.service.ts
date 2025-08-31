@@ -11,21 +11,9 @@ export class ProfileServiceService {
     private readonly profileRepository: Repository<Profile>,
   ) {}
 
-@RabbitSubscribe({
-  exchange: 'user-exchange',
-  routingKey: 'user.created',
-  queue: 'profile-queue',
-})
-async handleUserCreated(msg:{userId:number}){
-  console.log('📥 دریافت event user.created:', msg);
-
-const profile = this.profileRepository.create(
-{
-  userId:msg.userId
-}  
-);
-
-    await this.profileRepository.save(profile);
-}
+  async createProfile(userId: number,bio:string) {
+    const profile = this.profileRepository.create({ userId,bio });
+    return this.profileRepository.save(profile);
+  }
 
 }
