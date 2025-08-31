@@ -3,7 +3,7 @@ import { DatabaseService } from './database.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { join } from 'path';
-import { Post, User } from 'blog/common/entities';
+import { Post, User, Profile } from 'blog/common/entities';
 
 
 @Module({
@@ -21,7 +21,7 @@ import { Post, User } from 'blog/common/entities';
         username: configService.get('POSTGRES_USER'),
         password: configService.get('POSTGRES_PASSWORD'),
         database: configService.get('POSTGRES_DB'),
-        entities: [User, Post],
+  entities: [User, Post, Profile],
         synchronize: true,
       }),
       inject:[ConfigService]
