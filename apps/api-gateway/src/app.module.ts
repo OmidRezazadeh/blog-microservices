@@ -8,6 +8,7 @@ import { User, Post } from 'blog/common/entities';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './user/user.module';
 import { PostModule } from './post/post.module';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
   imports: [
@@ -18,7 +19,8 @@ import { PostModule } from './post/post.module';
     DatabaseModule,
     AuthModule,
     UsersModule,
-    PostModule
+    PostModule,
+    ProfileModule
   ],
   controllers: [AppController],
   providers: [AppService],
