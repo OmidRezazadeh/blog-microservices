@@ -10,4 +10,7 @@ export class RegisterDto{
     @IsNotEmpty()
     name:string
     
+    @IsNotEmpty()
+    bio:string
+    
 }
