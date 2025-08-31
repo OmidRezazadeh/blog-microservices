@@ -1,11 +1,13 @@
 import { Module } from '@nestjs/common';
-import { PostServiceModule } from './post-service.module';
+
+
 import { DatabaseModule } from 'blog/database';
+import { ProfileServiceModule } from './profile-service.module';
 
 @Module({
  imports:[
   DatabaseModule,
-  PostServiceModule,
+  ProfileServiceModule,
  ],
 })
 export class AppModule {}
