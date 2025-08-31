@@ -1,8 +1,29 @@
+// apps/user-service/src/main.ts
 import { NestFactory } from '@nestjs/core';
-import { ProfileServiceModule } from './profile-service.module';
 
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { ValidationPipe } from '@nestjs/common';
+import { useContainer } from 'class-validator';
+import { AppModule } from './app.module';
 async function bootstrap() {
-  const app = await NestFactory.create(ProfileServiceModule);
-  await app.listen(process.env.port ?? 3000);
+
+  const app = await NestFactory.create(AppModule); 
+  app.useGlobalPipes(new ValidationPipe());
+  useContainer(app.select(AppModule), { fallbackOnErrors: true });
+  app.connectMicroservice<MicroserviceOptions>({
+    
+    transport: Transport.RMQ,
+    options: {
+      urls: ['amqp://user_rabbitmq:admin_rabbitmq@localhost:5672'],
+      queue: 'profile_queue',
+      queueOptions: { durable: false },
+    },
+  });
+
+  await app.startAllMicroservices();
+  console.log('Profile-service microservice is running');
+
+  await app.listen(3004, '0.0.0.0');
+  console.log('REST API running on http://localhost:3004');
 }
 bootstrap();
