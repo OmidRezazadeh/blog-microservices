@@ -6,11 +6,12 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'blog/common/entities';
 import { AuthModule } from '@blog/auth';
+import { Profile } from 'blog/common/entities/profile.entity';
 
 @Module({
   imports: [
     ConfigModule,
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User,Profile]),
     AuthModule,
     ClientsModule.register([
       {
