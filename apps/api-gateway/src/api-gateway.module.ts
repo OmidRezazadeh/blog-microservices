@@ -7,10 +7,13 @@ import { UsersModule } from './user/user.module';
 import { PostService } from './post/post.service';
 import { PostController } from './post/post.controller';
 import { PostModule } from './post/post.module';
+import { ProfileService } from './src/profile/profile.service';
+import { ProfileService } from './profile/profile.service';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
-  imports: [UsersModule, PostModule],
+  imports: [UsersModule, PostModule, ProfileModule],
   controllers: [ApiGatewayController, UserController, PostController],
-  providers: [ApiGatewayService, UserService, PostService],
+  providers: [ApiGatewayService, UserService, PostService, ProfileService],
 })
 export class ApiGatewayModule {}
