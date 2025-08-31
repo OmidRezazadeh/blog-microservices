@@ -20,6 +20,17 @@ import { DatabaseModule } from 'blog/database';
           queueOptions: { durable: false },
         },
       },
+      {
+        name: 'PROFILE_SERVICE',
+        transport: Transport.RMQ,
+        options: {
+          urls: ['amqp://user_rabbitmq:admin_rabbitmq@localhost:5672'],
+          queue: 'profile_queue',
+          queueOptions: {
+            durable: false,
+          },
+        },
+      },
     ]),
   ],
 

@@ -2,6 +2,7 @@ import { RegisterDto, LoginDto } from 'blog/common';
 import * as bcrypt from 'bcrypt';
 import {
   ConflictException,
+  Inject,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -9,13 +10,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'blog/common/entities';
 import { Repository } from 'typeorm';
 import { Profile } from 'blog/common/entities/profile.entity';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class AuthServiceService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
-    private readonly profileRepository: Repository<Profile>,
+    @Inject('PROFILE_SERVICE') private readonly profileClient: ClientProxy, // اضافه کردیم
+
   ) {}
   async store(registerDto: RegisterDto) {
     const existingUser = await this.userRepository.findOne({
@@ -31,11 +34,9 @@ export class AuthServiceService {
       ...registerDto,
       password: hashedPassword,
     });
+    const bio= registerDto.bio
     const savedUser = await this.userRepository.save(user);
-    const profile = this.profileRepository.create({
-      userId: savedUser.id,
-    });
-    await this.profileRepository.save(profile);
+    this.profileClient.emit('profile_created', { userId: savedUser.id ,bio});
     return savedUser;
   }
 
