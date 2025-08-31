@@ -2,11 +2,11 @@ import { Inject, Injectable, UnauthorizedException, ConflictException } from '@n
 import { User } from 'blog/common/entities';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto, RegisterDto } from 'blog/common';
 import { firstValueFrom, timeout } from 'rxjs';
 import { ClientProxy } from '@nestjs/microservices';
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 
 @Injectable()
 export class AuthService {
@@ -14,7 +14,8 @@ export class AuthService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly jwtService: JwtService,
-    @Inject('AUTH_SERVICE') private readonly rabbitClient: ClientProxy
+    @Inject('AUTH_SERVICE') private readonly rabbitClient: ClientProxy,
+    private readonly amqpConnection: AmqpConnection,
   ) {}
 
   async store(registerDto: RegisterDto) {

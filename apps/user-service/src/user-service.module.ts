@@ -17,6 +17,7 @@ import { UserServiceService } from './user-service.service';
           queue: 'user_queue',
           queueOptions: { durable: false },
         },
+        
       },
     ]),
   ],

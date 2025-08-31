@@ -64,6 +64,15 @@
         "tsConfigPath": "apps/post-service/tsconfig.app.json"
       }
     },
+    "profile-service": {
+      "type": "application",
+      "root": "apps/profile-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/profile-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/profile-service/tsconfig.app.json"
+      }
+    },
     "role-service": {
       "type": "application",
       "root": "apps/role-service",
