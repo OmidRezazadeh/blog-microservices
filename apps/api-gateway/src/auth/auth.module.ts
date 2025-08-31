@@ -4,7 +4,7 @@ import { PassportModule } from '@nestjs/passport';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthService } from './auth.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from 'blog/common/entities';
+import { Profile, User } from 'blog/common/entities';
 import { AuthController } from './auth.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { JwtAuthGuard, JwtStrategy } from '@blog/auth';
@@ -13,7 +13,7 @@ import { JwtAuthGuard, JwtStrategy } from '@blog/auth';
   imports: [
     ConfigModule,
     PassportModule,
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User,Profile]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
@@ -34,6 +34,7 @@ import { JwtAuthGuard, JwtStrategy } from '@blog/auth';
           },
         },
       },
+
     ]),
   ],
   providers: [AuthService, JwtStrategy, JwtAuthGuard],

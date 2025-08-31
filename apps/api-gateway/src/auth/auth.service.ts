@@ -6,7 +6,7 @@ import { JwtService } from '@nestjs/jwt';
 import { LoginDto, RegisterDto } from 'blog/common';
 import { firstValueFrom, timeout } from 'rxjs';
 import { ClientProxy } from '@nestjs/microservices';
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+
 
 @Injectable()
 export class AuthService {
@@ -15,7 +15,7 @@ export class AuthService {
     private readonly userRepository: Repository<User>,
     private readonly jwtService: JwtService,
     @Inject('AUTH_SERVICE') private readonly rabbitClient: ClientProxy,
-    private readonly amqpConnection: AmqpConnection,
+
   ) {}
 
   async store(registerDto: RegisterDto) {
@@ -23,6 +23,7 @@ export class AuthService {
       const user = await firstValueFrom(
         this.rabbitClient.send('user.register', registerDto).pipe(timeout(5000))
       );
+
       
       // Check if the response contains an error
       if (user && user.error) {
@@ -32,7 +33,7 @@ export class AuthService {
           throw new Error(user.message);
         }
       }
-      
+
       return this.generateJwtToken(user);
     } catch (error) {
       console.error('Error in auth store:', error);
